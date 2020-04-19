@@ -4,7 +4,10 @@ def func(data:dict = {}) -> int:
     fdict = data
 
     for value in fdict:
-        print(value)
+        print(value[0])
+
+    for value in fdict:
+        print(value[1])
 
 
 dict1 = {"hi":1, "hello":2, "how goes?":3}
