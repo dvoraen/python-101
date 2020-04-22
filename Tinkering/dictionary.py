@@ -1,9 +1,8 @@
 dict1 = {"hi":1, "hello":2, "how goes?":3}
-dict2 = {"me":1, "myself":2, "Irene":3}
+dict2 = {}
 
-
-def func(data:dict = {}) -> int:
-    fdict = data
+def func(data:dict = None):
+    fdict = data or {}
 
     # This is what I want: the paired data.
     for value in fdict:
