@@ -5,15 +5,16 @@ _T = TypeVar("_T")
 
 class Descriptor(object):
     def __set_name__(self, owner: object, name: str):
-        self.pub_name = name
-        self.priv_name = "_" + self.pub_name
+        self.name = name
 
+    # Cannot use setattr/getattr here, as a rule.  It will recurse infinitely
+    # because it's basically calling __get__/__set__ from within getattr/setattr
     def __get__(self, obj: object, objtype: type[object] | None = None):
-        value = getattr(obj, self.priv_name)
+        value = obj.__dict__.get(self.name)
         return value
 
     def __set__(self, obj: object, value: Any):
-        setattr(obj, self.priv_name, value)
+        obj.__dict__[self.name] = value
 
 
 class TestClass:
