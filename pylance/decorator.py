@@ -1,4 +1,4 @@
-from typing import Generic, Callable, TypeVar
+from typing import Generic, Callable, TypeVar, Any
 from typing_extensions import Self
 
 T = TypeVar("T")
@@ -29,11 +29,11 @@ class lazy_property(Generic[T]):
         return value
 
 
-class lzp(object):
+class lzp(Generic[T]):
     def __init__(self, func: Callable[..., T]) -> None:
         self.func = func
 
-    def __get__(self, obj: U, objtype=None):
+    def __get__(self: Self, obj: Any, objtype: type[object] | None = None) -> Self | T:
         return self.func(obj) if obj else self
 
 
@@ -59,6 +59,9 @@ if __name__ == "__main__":
     test = Test()
     test_lazy = test.lazy
     test_lzp = test.lzp
+    if test_lzp is not lzp:
+        print(test_lzp.name)  # I'm unsure how to resolve this type error.
+
     test_prop = test.prop
     print(test_lazy)
     print(test_lzp)

@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Any, Callable
 
 
 class TestObject:
@@ -12,7 +12,7 @@ class TestObject:
         print("C")
 
 
-def caller(func: Callable):
+def caller(func: Callable[..., Any]):
     print("Calling function")
     func()
 

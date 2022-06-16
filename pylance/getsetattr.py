@@ -1,15 +1,3 @@
-from dataclasses import dataclass
-from typing import Any, TypeVar
-
-_T = TypeVar("_T")
-
-
-@dataclass
-class TypeMeta(object):
-    attribute: Any
-    attr_type: _T
-
-
 class TestClass(object):
 
     test1: str

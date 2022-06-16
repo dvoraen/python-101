@@ -1,5 +1,5 @@
 class MyIter:
-    def __init__(self, index=0):
+    def __init__(self, index: int = 0):
         self.mylist = [1, 2, 3, 4, 5]
         self.index = index
 

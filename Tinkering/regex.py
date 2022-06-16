@@ -1,4 +1,5 @@
 import re
+from typing import Pattern
 
 
 # @check
@@ -19,7 +20,7 @@ check_pattern = r"""
 """
 
 
-def check_match(test_str: str, regex):
+def check_match(test_str: str, regex: Pattern[str]):
     r = regex.match(test_str)
     if r is None:
         print("Did not match (%s)" % test_str)

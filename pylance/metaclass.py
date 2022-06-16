@@ -1,10 +1,9 @@
-from typing import Any
-from collections import namedtuple
+from typing import Any, NamedTuple
 from dataclasses import dataclass
 
 
 class MetaTest(type):
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args: Any, **kwargs: Any):
         instance = super().__new__(cls, *args, **kwargs)
 
         setattr(instance, "test", True)
@@ -26,7 +25,8 @@ class DataClass:
     b: bool = True
 
 
-TestTuple = namedtuple("TestT", ["good", "bye"])
+# namedtuple (not NamedTuple, note the caps) does not support typing well
+TestTuple = NamedTuple("TestT", good=str, bye=str)
 
 tt = TestTuple(good="hi", bye="there")
 # tt.good and tt.bye both appear in auto complete
@@ -43,13 +43,15 @@ print(dc)
 
 from typing import TypeVar, Sized
 
-ST = TypeVar('ST', bound=Sized)
+ST = TypeVar("ST", bound=Sized)
+
 
 def longer(x: ST, y: ST) -> ST:
     if len(x) > len(y):
         return x
     else:
         return y
+
 
 l1 = longer([1], [1, 2])  # ok, return type List[int]
 l2 = longer({1}, {1, 2})  # ok, return type Set[int]
