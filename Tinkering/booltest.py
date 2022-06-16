@@ -6,6 +6,8 @@
 test_value = 8  # in binary, 1000
 bit_mask = 4    # in binary, 0100
 
+print("Test value (None): %s" % bool(None))
+
 print("Test value (bool): %s" % bool(test_value))
 print("Test value (xor with mask): %s" % (test_value ^ bit_mask))
 

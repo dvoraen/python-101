@@ -1,8 +1,17 @@
+manyString = "Aendal,Bhandn,Apostate,Puffin,Herja"
+singleString = "Bhandn"
 
+testString = "material,qty"
 
-baseString = "Aendal Ferrin, a jumpy, introverted bookworm"
+manyList = manyString.split(",")
+singleList = singleString.split(",")
 
-splitName = baseString.split(", ", 1)
+try:
+    mq_str, inform_msg = testString.split("/")
+except ValueError:
+    mq_str = testString
+    inform_msg = None
 
-for split in splitName:
-    print(split)
+print(manyList)
+print(singleList)
+print(f"{mq_str} and {inform_msg}")
