@@ -1,4 +1,4 @@
-from typing import Generic, Callable, TypeVar, Any
+from typing import Generic, Callable, TypeVar, Any, Optional, overload
 from typing_extensions import Self
 
 T = TypeVar("T")
@@ -17,9 +17,15 @@ class lazy_property(Generic[T]):
         self.__name__ = func.__name__
         self.func = func
 
-    def __get__(
-        self: Self, obj: object | None, objtype: type[object] | None = None
-    ) -> Self | T:
+    @overload
+    def __get__(self: Self, obj: object, objtype: Optional[type[object]] = None) -> T:
+        ...
+
+    @overload
+    def __get__(self: Self, obj: None, objtype: Optional[type[object]] = None) -> Self:
+        ...
+
+    def __get__(self: Self, obj: object | None, objtype: Optional[type[object]] = None):
         if obj is None:
             return self
         value = obj.__dict__.get(self.__name__, missing)
@@ -38,7 +44,7 @@ class lzp(Generic[T]):
 
 
 class EmptyTest(object):
-    name = "Empty"
+    name = "I'm EmptyTest!"
 
 
 class Test:
@@ -59,10 +65,20 @@ if __name__ == "__main__":
     test = Test()
     test_lazy = test.lazy
     test_lzp = test.lzp
-    if test_lzp is not lzp:
-        print(test_lzp.name)  # I'm unsure how to resolve this type error.
+
+    # Since the overload for __get__ is there, it type checks to being
+    # EmptyTest, so you can use .name directly without error here.
+    # Compare the Pylance results for test_lazy and test_lzp.
+    # The former is EmptyTest, the latter is the union returned by __get__.
+    print("test_lazy", test_lazy.name)
+
+    # Use of isinstance here apparently narrows the type of test_lzp to
+    # EmptyTest, which is what makes the Unknown type for .name go away.
+    if isinstance(test_lzp, EmptyTest):
+        print("test_lzp", test_lzp.name)
 
     test_prop = test.prop
+
     print(test_lazy)
     print(test_lzp)
     print(test_prop)
