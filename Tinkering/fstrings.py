@@ -31,3 +31,8 @@ print()
 sh = StringHolder()
 sh.printme(3)
 sh.printformat(4)
+
+msg_template = "Hi, this is a message about {message}!"
+message = "something"
+
+print(f"{msg_template.format(message=message)}")
