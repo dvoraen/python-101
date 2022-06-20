@@ -1,4 +1,5 @@
-from typing import Generic, Callable, TypeVar, Any, Optional, overload
+from typing import Any, Callable, Generic, Optional, TypeVar, overload
+
 from typing_extensions import Self
 
 T = TypeVar("T")
@@ -17,15 +18,18 @@ class lazy_property(Generic[T]):
         self.__name__ = func.__name__
         self.func = func
 
+    # See notes in descriptor.py about why None has to be first.
     @overload
-    def __get__(self: Self, obj: object, objtype: Optional[type[object]] = None) -> T:
+    def __get__(self: Self, obj: None, objtype: Optional[type[object]] = ...) -> Self:
         ...
 
     @overload
-    def __get__(self: Self, obj: None, objtype: Optional[type[object]] = None) -> Self:
+    def __get__(self: Self, obj: object, objtype: Optional[type[object]] = ...) -> T:
         ...
 
-    def __get__(self: Self, obj: object | None, objtype: Optional[type[object]] = None):
+    def __get__(
+        self: Self, obj: object | None, objtype: Optional[type[object]] = None
+    ) -> Self | T:
         if obj is None:
             return self
         value = obj.__dict__.get(self.__name__, missing)
@@ -40,7 +44,8 @@ class lzp(Generic[T]):
         self.func = func
 
     def __get__(self: Self, obj: Any, objtype: type[object] | None = None) -> Self | T:
-        return self.func(obj) if obj else self
+        val = self.func(obj) if obj else self
+        return val
 
 
 class EmptyTest(object):
