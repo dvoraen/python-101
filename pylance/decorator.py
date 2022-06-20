@@ -18,7 +18,9 @@ class lazy_property(Generic[T]):
         self.__name__ = func.__name__
         self.func = func
 
-    # See notes in descriptor.py about why None has to be first.
+    # VERY IMPORTANT.  None is a subtype of object(), so if the obj: object
+    # function is listed first, the type checker will declare it the correct
+    # overload.
     @overload
     def __get__(self: Self, obj: None, objtype: Optional[type[object]] = ...) -> Self:
         ...
